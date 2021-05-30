@@ -137,8 +137,19 @@ class Review(models.Model):
     name = models.CharField('Имя', max_length=100)
     text = models.TextField('Текст отзыва', max_length=5000)
     date = models.DateTimeField(auto_now=True)
-    parent = models.ForeignKey('self', verbose_name='Родитель', on_delete=models.SET_NULL, null=True, blank=True)
-    movie = models.ForeignKey(Movie, verbose_name='Фильм', on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='Родитель',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    movie = models.ForeignKey(
+        Movie,
+        verbose_name='Фильм',
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
 
     def __str__(self):
         return f'{self.name} - {self.movie}'
