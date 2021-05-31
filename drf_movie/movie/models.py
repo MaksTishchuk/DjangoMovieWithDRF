@@ -142,7 +142,8 @@ class Review(models.Model):
         verbose_name='Родитель',
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='children'
     )
     movie = models.ForeignKey(
         Movie,
