@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie, Review, Rating
+from .models import Movie, Review, Rating, Actor
 
 
 class FilterReviewListSerializer(serializers.ListSerializer):
@@ -19,12 +19,31 @@ class RecursiveSerializer(serializers.Serializer):
         return serializer.data
 
 
+class ActorListSerializer(serializers.ModelSerializer):
+    """Список актеров/режиссеров"""
+
+    class Meta:
+        model = Actor
+        fields = ('id', 'name', 'age', 'image')
+
+
+class ActorDetailSerializer(serializers.ModelSerializer):
+    """Детальная информация про актера/режисера"""
+
+    class Meta:
+        model = Actor
+        fields = '__all__'
+
+
 class MovieListSerializer(serializers.ModelSerializer):
     """Список фильмов"""
 
+    rating_user = serializers.BooleanField()
+    middle_star = serializers.DecimalField(max_digits=2, decimal_places=1)
+
     class Meta:
         model = Movie
-        fields = ('title', 'tagline', 'category', 'year')
+        fields = ('id', 'title', 'tagline', 'category', 'year', 'rating_user', 'middle_star')
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
@@ -50,8 +69,8 @@ class MovieDetailSerializer(serializers.ModelSerializer):
     """Детали о фильме"""
 
     category = serializers.SlugRelatedField(slug_field='name', read_only=True)
-    directors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
-    actors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
+    directors = ActorListSerializer(read_only=True, many=True)
+    actors = ActorListSerializer(read_only=True, many=True)
     genres = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
     reviews = ReviewSerializer(many=True)
 
@@ -68,7 +87,7 @@ class CreateRatingSerializer(serializers.ModelSerializer):
         fields = ('star', 'movie')
 
     def create(self, validated_data):
-        rating = Rating.objects.update_or_create(
+        rating, _ = Rating.objects.update_or_create(
             ip=validated_data.get('ip', None),
             movie=validated_data.get('movie', None),
             defaults={'star': validated_data.get('star')}
