@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Movie, Actor
@@ -18,7 +18,7 @@ class MovieListView(generics.ListAPIView):
     рейтинг данный пользователь"""
 
     serializer_class = MovieListSerializer
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
 
     def get_queryset(self):

@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 from .models import Movie
 
+
 def get_client_ip(request):
     """Получение IP адреса пользователя"""
 
