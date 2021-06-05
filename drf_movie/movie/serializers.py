@@ -12,7 +12,7 @@ class FilterReviewListSerializer(serializers.ListSerializer):
 
 
 class RecursiveSerializer(serializers.Serializer):
-    """Вывод рекурсивно children для вложенных комментариев"""
+    """Вывод рекурсивно children для вложенности комментариев"""
 
     def to_representation(self, value):
         serializer = ReviewSerializer(value, context=self.context)
