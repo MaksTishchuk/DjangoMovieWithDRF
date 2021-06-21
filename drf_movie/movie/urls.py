@@ -21,7 +21,6 @@ urlpatterns = format_suffix_patterns([
     path('actors/<int:pk>/', views.ActorsViewSet.as_view({'get': 'retrieve'})),
 ])
 
-
 # urlpatterns = [
 #     path('movie/', MovieListView.as_view()),
 #     path('movie/<int:pk>/', MovieDetailView.as_view()),
